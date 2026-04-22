@@ -1,0 +1,587 @@
+
+@config "../../tailwind.config.js";
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+
+@theme {
+  --color-brand-bg:      #17192D;
+  --color-brand-bg-deep: #0F1120;
+  --color-brand-accent:  #E9704D;
+  --color-brand-blue:    #3B61AB;
+
+  --font-display: 'Fussion', 'Eurostile', Arial, sans-serif;
+  --font-sans:    'Eurostile', Arial, sans-serif;
+  --font-mono:    'Courier New', Courier, monospace;
+}
+
+/* ─── FONT FACES ─────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Fussion';
+  src: url('/fonts/Fussion_accented.woff') format('woff');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Eurostile';
+  src: url('/fonts/Eurostile_Extd.woff') format('woff'),
+       url('/fonts/Eurostile_Extd.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Eurostile';
+  src: url('/fonts/Eurostile_Extd_Medium.woff') format('woff'),
+       url('/fonts/Eurostile_Extd_Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Eurostile';
+  src: url('/fonts/Eurostile_Extd_Black.woff') format('woff'),
+       url('/fonts/Eurostile_Extd_Black.otf') format('opentype');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── RESET ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ─── TYPOGRAPHY HIERARCHY ───────────────────────────────────────────────── */
+/*
+  Numbers (large):  font-display → Fussion
+  Headings/Titles:  font-sans font-bold (700) → Eurostile Bold
+  Body text:        font-sans font-medium (500) → Eurostile Medium
+  Micro uppercase:  font-sans font-normal (400) → Eurostile
+*/
+body {
+  background-color: #17192D;
+  color: #FFFFFF;
+  font-family: 'Eurostile', Arial, sans-serif;
+  font-weight: 500;                  /* body = Eurostile Medium */
+  letter-spacing: 0.05em;            /* +1px over default at ~16px */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings use Eurostile Bold */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Eurostile', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* Large display numbers use Fussion */
+.font-display {
+  font-family: 'Fussion', 'Eurostile', Arial, sans-serif !important;
+}
+
+/* Micro labels — Eurostile Light (400) with wide tracking */
+.text-micro {
+  font-family: 'Eurostile', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 0.625rem;               /* 10px */
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+/* ─── CLIP-PATH UTILITIES ─────────────────────────────────────────────────── */
+
+.clip-card {
+  clip-path: polygon(
+    40px 0%,                        /* top-left: bevel 40px ↘ */
+    100% 0%,                        /* top-right: dritto */
+    100% calc(100% - 40px),         /* bottom-right: inizio bevel */
+    calc(100% - 40px) 100%,         /* bottom-right: bevel 40px ↗ */
+    16px 100%,                      /* bottom-left: inizio bevel piccolo */
+    0% calc(100% - 16px),           /* bottom-left: bevel 16px ↗ */
+    0% 40px                         /* torna al top-left */
+  );
+}
+
+
+.clip-card-footer {
+  clip-path: polygon(
+    80px 0%,                         /* top-left: bevel grande ↘ (accentuato) */
+    100% 0%,                         /* top-right: dritto */
+    100% calc(100% - 40px),          /* bottom-right: inizio bevel */
+    calc(100% - 40px) 100%,          /* bottom-right: bevel 40px ↗ */
+    40px 100%,                       /* bottom-left: inizio bevel */
+    0% calc(100% - 40px),            /* bottom-left: bevel 40px ↗ */
+    0% 80px                          /* torna al top-left */
+  );
+}
+
+@media only screen and (max-width: 768px) {
+
+  .clip-card-footer {
+    clip-path: polygon(
+      40px 0%,                         /* top-left: bevel grande ↘ (accentuato) */
+      100% 0%,                         /* top-right: dritto */
+      100% calc(100% - 20px),          /* bottom-right: inizio bevel */
+      calc(100% - 20px) 100%,          /* bottom-right: bevel 40px ↗ */
+      20px 100%,                       /* bottom-left: inizio bevel */
+      0% calc(100% - 20px),            /* bottom-left: bevel 40px ↗ */
+      0% 40px                          /* torna al top-left */
+    );
+  }
+}
+
+/* Clip-card BORDER wrapper — use on parent, 1px padding gives the border color */
+/* Clip-card BORDER wrapper — use on parent, 1px padding gives the border color */
+.clip-card-border {
+  clip-path: polygon(
+    40px 0%,
+    100% 0%,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    16px 100%,
+    0% calc(100% - 16px),
+    0% 40px
+  );
+  padding: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.clip-card-border > * {
+  clip-path: polygon(
+    39px 0%,
+    100% 0%,
+    100% calc(100% - 39px),
+    calc(100% - 39px) 100%,
+    15px 100%,
+    0% calc(100% - 15px),
+    0% 39px
+  );
+  background: #0F1120;
+}
+
+
+.clip-btn-tr {
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 10px) 0%,
+    100% 10px,
+    100% 100%,
+    0% 100%
+  );
+}
+
+.clip-btn-bl {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    10px 100%,
+    0% calc(100% - 10px)
+  );
+}
+
+/* ─── SITE BUTTON hover ──────────────────────────────────────────────────── */
+/* Primary (arancione): hover → sfondo nero, testo arancione, bordo arancione */
+.site-btn-primary {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+.site-btn-primary:hover {
+  background-color: #000 !important;
+  color: #E9704D !important;
+}
+
+/* Ghost (bordo bianco): hover → sfondo nero, testo bianco, bordo bianco */
+.site-btn-ghost {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+.site-btn-ghost:hover {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* ─── GRAIN TEXTURE ──────────────────────────────────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  top: -8%; left: -8%;
+  width: 116%; height: 116%;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  animation: grain 0.8s steps(2) infinite;
+  will-change: transform;
+}
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10%       { transform: translate(-2%, -3%); }
+  30%       { transform: translate(3%, 2%); }
+  50%       { transform: translate(-1%, 4%); }
+  70%       { transform: translate(4%, -1%); }
+  90%       { transform: translate(-3%, 2%); }
+}
+
+/* ─── ANIMATED BACKGROUND BLOBS ──────────────────────────────────────────── */
+/* .anim-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.anim-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+.anim-blob-1 {
+  width: 75vw; height: 75vw;
+  background: radial-gradient(circle, rgba(59,97,171,0.55) 0%, transparent 70%);
+  top: -20vw; left: -15vw;
+  animation: blobFloat1 20s ease-in-out infinite alternate;
+  opacity: 0.22;
+}
+.anim-blob-2 {
+  width: 60vw; height: 60vw;
+  background: radial-gradient(circle, rgba(233,112,77,0.45) 0%, transparent 70%);
+  bottom: -15vw; right: -10vw;
+  animation: blobFloat2 25s ease-in-out infinite alternate;
+  opacity: 0.14;
+}
+.anim-blob-3 {
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(59,97,171,0.35) 0%, transparent 70%);
+  top: 35%; left: 25%;
+  animation: blobFloat3 18s ease-in-out infinite alternate;
+  opacity: 0.12;
+}
+.anim-blob-4 {
+  width: 35vw; height: 35vw;
+  background: radial-gradient(circle, rgba(233,112,77,0.3) 0%, transparent 70%);
+  top: 55%; left: 55%;
+  animation: blobFloat4 22s ease-in-out infinite alternate;
+  opacity: 0.10;
+}
+
+.anim-cursor {
+  position: fixed;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233,112,77,0.18) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(24px);
+  will-change: transform;
+  transform: translate(-50%, -50%);
+}
+@keyframes blobFloat1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(8vw, 6vw) scale(1.12); }
+  100% { transform: translate(4vw, 12vw) scale(0.94); }
+}
+@keyframes blobFloat2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-7vw, -9vw) scale(1.18); }
+  100% { transform: translate(-12vw, -4vw) scale(0.88); }
+}
+@keyframes blobFloat3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(6vw, -7vw) scale(1.22); }
+  100% { transform: translate(-5vw, 5vw) scale(0.82); }
+}
+@keyframes blobFloat4 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-4vw, 5vw) scale(1.15); }
+  100% { transform: translate(7vw, -6vw) scale(0.9); }
+} */
+
+/* ─── HERO ────────────────────────────────────────────────────────────────── */
+.hero-thermal-bg {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 50%, rgba(233,112,77,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(59,97,171,0.10) 0%, transparent 70%);
+  animation: thermalPulse 8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes thermalPulse {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+/* ─── GLASS CARD ─────────────────────────────────────────────────────────── */
+.glass-card {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 12, 28, 0.70);
+
+}
+
+/* ─── SVG COUNTER STROKE ANIMATION ──────────────────────────────────────── */
+.stroke-traditional {
+  stroke-dasharray: 816;
+  stroke-dashoffset: 816;
+  transition: stroke-dashoffset 3.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.stroke-fftm {
+  stroke-dasharray: 816;
+  stroke-dashoffset: 816;
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.stroke-animate {
+  stroke-dashoffset: 0 !important;
+}
+
+/* ─── COUNTER GRADIENT TEXT ──────────────────────────────────────────────── */
+.counter-gradient {
+  background: linear-gradient(90deg, #E9704D 0%, #3B61AB 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── SHIMMER BUTTON ─────────────────────────────────────────────────────── */
+/* The .btn-shimmer-layer is a div inside the button, moved via JS */
+.btn-shimmer-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-shimmer-layer.active { opacity: 1; }
+.btn-shimmer-band {
+  position: absolute;
+  top: -20%;
+  width: 60%;
+  height: 140%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(233, 112, 77, 0.55) 45%,
+    rgba(59, 97, 171, 0.45) 55%,
+    transparent 80%
+  );
+  filter: blur(4px);
+  transform: translateX(-100%);
+  will-change: transform;
+}
+
+/* ─── DRAG CURSOR ────────────────────────────────────────────────────────── */
+.drag-cursor {
+  position: absolute;
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: rgba(233, 112, 77, 0.15);
+  border: 1px solid rgba(233, 112, 77, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  z-index: 20;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: transform, opacity;
+}
+.drag-cursor.visible { opacity: 1; }
+.drag-cursor span {
+  font-family: 'Eurostile', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(233, 112, 77, 0.9);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* ─── SCROLLBAR HIDE ─────────────────────────────────────────────────────── */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ─── WORD REVEAL ────────────────────────────────────────────────────────── */
+.word-clip { display: inline-block; overflow: hidden; vertical-align: bottom; padding-top: 0.35em; margin-top: -0.35em; }
+
+/* ─── FOCUS ──────────────────────────────────────────────────────────────── */
+:focus-visible { outline: 2px solid #E9704D; outline-offset: 3px; }
+
+/* ─── NAVBAR SAFE AREA ───────────────────────────────────────────────────── */
+.navbar-safe {
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+}
+
+
+
+
+
+
+/* ---    background da codepn ------ */
+
+.anim-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: #17192D;
+  filter: url(#goo-filter);
+}
+
+.anim-blob {
+  position: absolute;
+  border-radius: 50%;
+  /* Colori pieni funzionano meglio col goo filter */
+}
+
+.anim-blob-1 {
+  width: 340px;
+  height: 340px;
+  background: #6366f1;
+  top: 20%;
+  left: 15%;
+  animation: blob-move-1 18s ease-in-out infinite alternate;
+}
+
+.anim-blob-2 {
+  width: 280px;
+  height: 280px;
+  background: #06b6d4;
+  top: 50%;
+  right: 20%;
+  animation: blob-move-2 22s ease-in-out infinite alternate;
+}
+
+.anim-blob-3 {
+  width: 220px;
+  height: 220px;
+  background: #8b5cf6;
+  bottom: 15%;
+  left: 40%;
+  animation: blob-move-3 20s ease-in-out infinite alternate;
+}
+
+.anim-blob-4 {
+  width: 300px;
+  height: 300px;
+  background: #ec4899;
+  top: 35%;
+  left: 55%;
+  animation: blob-move-4 25s ease-in-out infinite alternate;
+}
+
+/* Movimenti sinusoidali organici */
+@keyframes blob-move-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(120px, -80px) scale(1.1); }
+  66%  { transform: translate(-60px, 100px) scale(0.9); }
+  100% { transform: translate(80px, 40px) scale(1.05); }
+}
+
+@keyframes blob-move-2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(-100px, 60px) scale(0.95); }
+  66%  { transform: translate(80px, -120px) scale(1.1); }
+  100% { transform: translate(-40px, -60px) scale(1); }
+}
+
+@keyframes blob-move-3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(70px, 90px) scale(1.15); }
+  66%  { transform: translate(-110px, -40px) scale(0.9); }
+  100% { transform: translate(50px, -80px) scale(1.05); }
+}
+
+@keyframes blob-move-4 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(-80px, -100px) scale(1.05); }
+  66%  { transform: translate(100px, 70px) scale(0.95); }
+  100% { transform: translate(-50px, 50px) scale(1.1); }
+}
+
+.anim-cursor {
+  position: fixed;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233,112,77,0.18) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(24px);
+  will-change: transform;
+  transform: translate(-50%, -50%);
+}
+
+/* ─── GLOBAL BUTTON STYLE ────────────────────────────────────────────────── */
+@layer base {
+  button,
+  [role="button"],
+  a[role="button"],
+  .btn,
+  .clip-btn-bl a,
+  .clip-btn-tr a {
+    padding: 15px 20px; /* 12px 24px — modifica a piacere */
+  }
+}
+
+
+/* ── Custom Cursor ── */
+*,
+*::before,
+*::after {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  background-color: #E9704D;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 1;
+  filter: blur(0px);
+  transition:
+    width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    height 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    margin 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.3s ease,
+    filter 0.35s ease,
+    background-color 0.35s ease;
+  will-change: transform;
+}
+
+.custom-cursor.cursor-hover {
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  margin-top: -24px;
+  background-color: rgba(233, 112, 77, 0.35);
+  filter: blur(10px);
+}
+
+/* Nascondi il cursore custom su dispositivi touch */
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    cursor: auto !important;
+  }
+}
